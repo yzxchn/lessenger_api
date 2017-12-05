@@ -1,0 +1,6 @@
+bin/
+lib/
+pip-selfcheck.json
+include/
+*.sqlite3
+__pycache__/
