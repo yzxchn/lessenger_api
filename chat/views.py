@@ -1,5 +1,8 @@
+from . import receive
+
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, \
+                        JsonResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
@@ -10,16 +13,13 @@ def index(request):
 @csrf_exempt
 def messages(request):
     # handle request
-    # res = handle_request(request)
-    data = {
-            'messages': [ 
-                {
-                    'type': 'text', 
-                    'text': 'Hello world!'
-                }
-            ]
-            }
-    res = JsonResponse(data)
+    if request.method == 'POST':
+        try:
+            response = receive.handle_request(request)
+        except:
+            return HttpResponseBadRequest("Something is wrong with the request")
+    else:
+        raise Http404("Unsupported HTTP method")
     # Allow CORS access from the UI
-    res['Access-Control-Allow-Origin'] = 'http://hipmunk.github.io'
-    return res
+    response['Access-Control-Allow-Origin'] = 'http://hipmunk.github.io'
+    return response

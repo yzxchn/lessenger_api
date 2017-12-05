@@ -4,3 +4,4 @@ pip-selfcheck.json
 include/
 *.sqlite3
 __pycache__/
+*.swp
