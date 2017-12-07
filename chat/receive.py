@@ -1,3 +1,5 @@
+import configparser
+
 from django.http import JsonResponse
 
 def handle_request(request):
@@ -5,25 +7,57 @@ def handle_request(request):
     fields = request.POST
     action = fields["action"]
     if action == "join":
-        response = handle_join(fields)
+        response = received_join(fields)
     elif action == "message":
-        response = handle_message(fields)
+        response = received_message(fields)
     else:
         raise ValueError("Unexpected action value \"{}\"".format(action))
 
     return response
 
-def handle_join(fields):
+def handle_DM_response(response):
+    """
+    Handles the response of the dialog manager. The response could be a 
+    command to perform futher actions, or it could be a message to be sent 
+    to the user.
+    """
+    if response.get_type() == "text":
+        return str(response)
+    elif response.get_type() == "command":
+        return handle_command(response.get_command_type(), 
+                              response.get_params())
+    else:
+        raise ValueError("Unknown type of response from dialog manager: \"{}\""\
+                                                   .format(response.get_type()))
+
+def received_request_join(fields):
+    response = handle_DM_response(dialog.handle_event("join", fields))
+    send_response(response)
+
+def received_request_message(fields):
+    response = handle_DM_response(dialog.handle_message(fields["text"]))
+    send_response(response)
+
+def handle_command(command, params):
+    """
+    Given a command from the dialog manager, and some parameters. Perform 
+    the corresponding actions, then return a message response to be sent to 
+    the user.
+    """
+    if command == "get-weather":
+        weather_data = get_weather(params["location"])
+    else:
+        raise ValueError("Unknown command from dialog manager: \"{}\""\
+                                                               .format(command))
+    
+def send_response(message):
     response_data = {
                'messages': [ 
                    {
                        'type': 'text', 
-                       'text': 'Hello, {}!'.format(fields["name"])
+                       'text': message
                    }
                ]
             }
     return JsonResponse(response_data)
-
-def handle_message(fields):
-    pass
 

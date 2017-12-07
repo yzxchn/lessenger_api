@@ -2,6 +2,7 @@ bin/
 lib/
 pip-selfcheck.json
 include/
+*.config
 *.sqlite3
 __pycache__/
 *.swp
