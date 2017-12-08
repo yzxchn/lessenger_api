@@ -17,6 +17,13 @@ def classify_message(message):
 def handle_event(event, params):
     if event == "join":
         return event_join(params)
+    elif event == "report-weather":
+        return event_report_weather(params)
+    elif event == "loc-not-found":
+        return MessageReply("Sorry, I don't know about that location.")
+    elif event == "weather-not-found":
+        return MessageReply("Sorry, I can't find weather information"+\
+                            " for that location.")
     else:
         return default_response()
 
@@ -28,6 +35,10 @@ def event_join(params):
 
     return MessageReply("Hello, {}!".format(name))
 
+def event_report_weather(params):
+    return MessageReply("Currently, it's {}F. {}"\
+                                    .format(params["temperature"],
+                                            params["summary"]))
 
 def handle_ask_weather(message):
     patterns = [r"what's the weather in ([\w ]+)", 

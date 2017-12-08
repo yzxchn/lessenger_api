@@ -1,5 +1,8 @@
 import configparser
 
+from chat import dialog
+from chat import actions
+
 from django.http import JsonResponse
 
 def handle_request(request):
@@ -7,9 +10,9 @@ def handle_request(request):
     fields = request.POST
     action = fields["action"]
     if action == "join":
-        response = received_join(fields)
+        response = received_request_join(fields)
     elif action == "message":
-        response = received_message(fields)
+        response = received_request_message(fields)
     else:
         raise ValueError("Unexpected action value \"{}\"".format(action))
 
@@ -32,11 +35,11 @@ def handle_DM_response(response):
 
 def received_request_join(fields):
     response = handle_DM_response(dialog.handle_event("join", fields))
-    send_response(response)
+    return compose_response(response)
 
 def received_request_message(fields):
     response = handle_DM_response(dialog.handle_message(fields["text"]))
-    send_response(response)
+    return compose_response(response)
 
 def handle_command(command, params):
     """
@@ -45,12 +48,13 @@ def handle_command(command, params):
     the user.
     """
     if command == "get-weather":
-        weather_data = get_weather(params["location"])
+        response = actions.get_weather(params["location"])
     else:
         raise ValueError("Unknown command from dialog manager: \"{}\""\
                                                                .format(command))
+    return response
     
-def send_response(message):
+def compose_response(message):
     response_data = {
                'messages': [ 
                    {
