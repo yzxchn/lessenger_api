@@ -9,9 +9,9 @@ First, clone the repository into a directory of your choice.
 
 Change into the project root, and put the separately provided `keys.config` file here.
 
-Then, install the dependencies.
+Then, install the dependencies:
 
->`pip install -r requirements.txt`
+>`pip3 install -r requirements.txt`
 
 Run the server with the following command:
 
