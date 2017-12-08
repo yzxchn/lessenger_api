@@ -6,7 +6,14 @@ from chat import actions
 from django.http import JsonResponse
 
 def handle_request(request):
-    """Given a POST request to /chat/messages, handle the message accordingly"""
+    """Given a POST request to /chat/messages, handle the message accordingly
+
+    Args:
+        request (django.http.HttpRequest): a POST request sent to '/chat/messages'
+
+    Returns:
+        django.http.JsonResponse: a response to be sent to the user
+    """
     fields = request.POST
     action = fields["action"]
     if action == "join":
@@ -19,10 +26,10 @@ def handle_request(request):
     return response
 
 def handle_DM_response(response):
-    """
-    Handles the response of the dialog manager. The response could be a 
-    command to perform futher actions, or it could be a message to be sent 
-    to the user.
+    """Handles the response of the dialog manager. 
+    
+    The response could be a command to perform futher actions, or
+    a message to be sent to the user.
     """
     if response.get_type() == "text":
         return str(response)
@@ -42,7 +49,7 @@ def received_request_message(fields):
     return compose_response(response)
 
 def handle_command(command, params):
-    """
+    """Handles a dialog manager command.
     Given a command from the dialog manager, and some parameters. Perform 
     the corresponding actions, then return a message response to be sent to 
     the user.

@@ -29,7 +29,7 @@ def get_darksky_weather(location):
     if coordinates:
         lng = coordinates["lng"]
         lat = coordinates["lat"]
-    else:
+    else: # if coordinates is None
         raise LocationNotFoundError("Can not find location: {}".format(location))
 
     url = "https://api.darksky.net/forecast/{}/{},{}".format(DARKSKY_KEY, 
