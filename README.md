@@ -21,5 +21,6 @@ Open the chatbot UI [here](http://hipmunk.github.io/hipproblems/lessenger/)
 
 # Description
 There are several core components of the program:
-*`receive.py` is used for handling and responding to requests sent by the UI.
-*`dialog.py` is the 'dialog manager', it processes the messages sent by the user, and is also responsible for generating responses to be sent to the user.
+
+* `receive.py` is used for handling and responding to requests sent by the UI.
+* `dialog.py` is the 'dialog manager', it processes the messages sent by the user, and is also responsible for generating responses to be sent to the user.
