@@ -23,4 +23,6 @@ Open the chatbot UI [here](http://hipmunk.github.io/hipproblems/lessenger/)
 There are several core components of the program:
 
 * `receive.py` is used for handling and responding to requests sent by the UI.
-* `dialog.py` is the 'dialog manager', it processes the messages sent by the user, and is also responsible for generating responses to be sent to the user.
+* `dialog.py` is the "dialog manager", it processes the messages sent by the user, and is also responsible for generating responses to be sent to the user.
+* `actions.py` contains code for actions the bot could perform. For now, it only contains the action of getting weather information for a location the user specifies.
+* `weather.py` contains code for querying the Google Maps API and DarkSky API.
