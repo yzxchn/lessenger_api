@@ -11,11 +11,11 @@ Change into the project root, and put the separately provided `keys.config` file
 
 Then, install the dependencies.
 
-  `pip install -r requirements.txt`
+>`pip install -r requirements.txt`
 
 Run the server with the following command:
 
-  `python3 manage.py runserver 9000`
+>`python3 manage.py runserver 9000`
 
 Open the chatbot UI [here](http://hipmunk.github.io/hipproblems/lessenger/)
 
