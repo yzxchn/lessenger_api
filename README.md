@@ -5,7 +5,7 @@ This is my solution to the [Hipmunk Lessenger problem](https://github.com/Hipmun
 # How to use
 First, clone the repository into a directory of your choice.
 
-  `git clone git@github.com:yzxchn/lessenger_api.git`
+>`git clone git@github.com:yzxchn/lessenger_api.git`
 
 Change into the project root, and put the separately provided `keys.config` file here.
 
