@@ -16,7 +16,7 @@ def messages(request):
         try:
             response = receive.handle_request(request)
         except Exception as e:
-            traceback.print_tb(e.__traceback__)
+            traceback.print_tb(e, e.__traceback__)
             return HttpResponseBadRequest("Something is wrong with the request")
     else:
         raise Http404("Unsupported HTTP method")

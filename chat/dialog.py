@@ -17,6 +17,8 @@ def handle_message(message):
     intent = classify_message(message)
     if intent == "ask-weather":
         return handle_ask_weather(message)
+#    elif intent == "ask-tomorrow-weather":
+#        return handle_ask_tomorrow_weather(message)
     else:
         return default_response()
 
@@ -29,6 +31,10 @@ def classify_message(message):
     """
     if "weather" in message.lower():
         return "ask-weather"
+       # if "tomorrow" in message.lower():
+       #     return "ask-tomorrow-weather"
+       # else:
+       #     return "ask-weather"
     else:
         return "unknown"
 
@@ -43,6 +49,8 @@ def handle_event(event, params):
     # message.
     elif event == "report-weather": 
         return event_report_weather(params)
+#     elif event == "report-tomorrow-weather":
+#         return 
     # the bot fails to find the location provided by the user.
     elif event == "loc-not-found":
         return MessageReply("Sorry, I don't know about that location.")
@@ -65,23 +73,46 @@ def event_join(params):
 def event_report_weather(params):
     """Composes a natural-sounding report of the weather information.
     """
-    return MessageReply("Currently, it's {}F. {}"\
-                                    .format(params["temperature"],
-                                            params["summary"]))
+    date = params["date"]
+    if date == "current":
+        return MessageReply("Currently, it's {}F. {}"\
+                                        .format(params["temperature"],
+                                                params["summary"]))
+    elif date == "tomorrow":
+        return MessageReply(("Tomorrow, there will be a high of {}F and a low "+\
+                            "of {}F. {}").format(params["temperature"]["high"], 
+                                                 params["temperature"]["low"], 
+                                                 params["summary"]))
 
 def handle_ask_weather(message):
     """Parses and extracts the location from a message asking for weather.
     """
-    patterns = [r"what's the weather in ([\w ]+)", 
-                r"weather in ([\w ]+)", 
-                r"([\w ]+) weather"]
+    patterns = [r"what's the weather (?P<date>\w+)? ?in (?P<loc>[\w ]+$)", 
+                r"weather (?P<date>\w+)? ?in (?P<loc>[\w ]+$)", 
+                r"(?P<loc>[\w ]+) weather (?P<date>\w+)?$"]
     for p in patterns:
         m = re.match(p, message.lower())
         if m:
-            loc = m.group(1)
+            loc = m.group('loc')
+            date = m.group('date')
+            if not date:
+                date = "current"
             return CommandReply("get-weather", 
-                                {"location": loc})
+                                {"location": loc, 
+                                 "date": date})
     return default_response()
+
+# def handle_ask_tomorrow_weather(message):
+#     patterns = [r"What's the weather tomorrow in ([\w ]+)", 
+#                 r"weather tomorrow in ([\w ]+)", 
+#                 r"([\w ]+) weather tomorrow"]
+#     for p in patterns:
+#         m = re.match(p, message.lower())
+#         if m:
+#             loc = m.group(1)
+#             return CommandReply("get-tomorrow-weather", 
+#                                 {"location": loc})
+#     return default_response()
 
 def default_response():
     return MessageReply("Sorry, I don't understand.")

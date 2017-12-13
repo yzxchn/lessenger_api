@@ -55,7 +55,9 @@ def handle_command(command, params):
     the user.
     """
     if command == "get-weather":
-        response = actions.get_weather(params["location"])
+        response = actions.get_weather(params["location"], params["date"])
+#    elif command == "get-tomorrow-weather":
+#        response = action.get_weather(params["location"])
     else:
         raise ValueError("Unknown command from dialog manager: \"{}\""\
                                                                .format(command))

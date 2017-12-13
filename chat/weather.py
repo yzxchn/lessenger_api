@@ -20,7 +20,7 @@ def get_coordinates(location):
         coordinates = None
     return coordinates
 
-def get_darksky_weather(location):
+def get_darksky_weather(location, date):
     """
     Given a location string, find the current weather at that location, using 
     DarkSky API.
@@ -36,8 +36,15 @@ def get_darksky_weather(location):
                                                              lat, lng)
     result = json.load(request.urlopen(url))
     try:
-        summary = result["currently"]["summary"]
-        temperature = result["currently"]["temperature"]
+        if date == "tomorrow":
+            tomorrow = result["daily"]["data"][0]
+            summary = tomorrow["summary"]
+            temperature = {"high":tomorrow["temperatureHigh"], 
+                           "low": tomorrow["temperatureLow"]}
+        else:
+            summary = result["currently"]["summary"]
+            temperature = result["currently"]["temperature"]
+
     except KeyError:
         raise WeatherNotFoundError
     

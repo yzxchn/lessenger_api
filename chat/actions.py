@@ -3,7 +3,7 @@ import chat.weather as wt
 
 from . import receive as rv
 
-def get_weather(location):
+def get_weather(location, date):
     """This action should be called when the dialog manager sends the 
     "get-weather" command. It takes a location string, and finds the weather 
     information for that location. Then talks to dialog manager to compose a 
@@ -17,9 +17,13 @@ def get_weather(location):
              it's 59F. Cloudy.")
     """
     try:
-        summary, temp = wt.get_darksky_weather(location)
-        params = {"summary": summary, "temperature": temp}
+        summary, temp = wt.get_darksky_weather(location, date)
+        params = {"date": date, "summary": summary, "temperature": temp}
         dm_response = dialog.handle_event("report-weather", params)
+        # if date == "today":
+        #     dm_response = dialog.handle_event("report-weather", params)
+        # elif date == "tomorrow":
+        #     dm_response = dialog.handle_event("report-tomorrow-weather", params)
         response = rv.handle_DM_response(dm_response)
     except wt.LocationNotFoundError:
         dm_response = dialog.handle_event("loc-not-found", {})
